@@ -15,6 +15,11 @@ int main(int argc, char* argv[]){
         std::cin >> input;
     }
 
+    if (input == 0) {
+        std::cerr << "Not defined!" << "\n";
+        return -2;
+    }
+
     std::string roman;
     int max_index = 12;
     while (input > 0) {
