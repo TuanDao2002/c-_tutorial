@@ -1,5 +1,6 @@
 #include<iostream>
-#include<string>
+#include<stdlib.h>
+#define NUM_INT 5
 
 bool is_integer(char* int_str) {
     int len = std::string(int_str).length();
@@ -19,7 +20,7 @@ bool is_integer(char* int_str) {
 
 int main(int argc, char* argv[]) {
     int int_arr[5];
-    if (argc != 6) {
+    if (argc != NUM_INT + 1) {
         std::cerr << "There must be only 5 input arguments" << "\n";
         return -1;
     }
@@ -27,7 +28,7 @@ int main(int argc, char* argv[]) {
     for (int i = 1; i < argc; i++) {
         if (!is_integer(argv[i])) {
             std::cerr << "There is invalid integer" << "\n";
-            return -1;
+            return -2;
         }
         
         *(int_arr + i - 1) = atoi(argv[i]);
