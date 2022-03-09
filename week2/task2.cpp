@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
         *(int_arr + i - 1) = atoi(argv[i]);
     }
 
+    
     for (int j = 0; j < 5; j++) {
         std::cout << "Valid integer: " << *(int_arr + j) << "\n";
     }
