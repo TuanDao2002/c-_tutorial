@@ -1,6 +1,0 @@
-Invalid: 1.2
-Invalid: 1.
-Invalid: 2.
-Invalid: 2.2
-Invalid: 0.1
-Invalid: 1.2
