@@ -21,18 +21,27 @@ class student {
             std::cout << "Name: " << name << "\tScore: " << get_score() << "\n";
         }
 
+        void write_file(std::string val) {
+            std::fstream myfile;
+            myfile.open(name + ".data", std::ios::out);
+
+            if (!myfile) {
+                std::cout << "Cannot open file" << "\n";
+                return;
+            }
+            
+            myfile << password << "\n";
+            
+            std::cout << "Password is saved!" << "\n"; 
+            myfile.close();
+        }
+
         void change_pwd() {
             if (password.empty()) {
                 std::cout << "Enter a password: ";
                 std::getline(std::cin, password); // only use cin.ignore when we use std::cin before std::getline
 
-                std::fstream myfile;
-                myfile.open(name + ".data", std::ios::out);
-
-                myfile << password << "\n";
-                
-                std::cout << "Password is saved!" << "\n"; 
-                myfile.close();
+                write_file(password);
             } else {
                 std::string new_password;
                 std::string prev_password;
@@ -49,13 +58,7 @@ class student {
 
                 password = new_password;
 
-                std::fstream myfile;
-                myfile.open(name + ".data", std::ios::out);
-
-                myfile << new_password << "\n";
-                
-                std::cout << "New password is saved!" << "\n"; 
-                myfile.close();
+                write_file(new_password);
             }
         }
 };
