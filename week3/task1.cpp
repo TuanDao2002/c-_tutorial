@@ -14,14 +14,39 @@ int main(){
     std::fstream myfile;
     switch (choice) {
         case 1: 
-            std::cout << "Input a password: ";
-            std::cin >> password;
-
             myfile.open("pwd.dat", std::ios::out);
+            
+            if (!myfile) {
+                std::cout << "Cannot open file" << "\n";
+                return -1;
+            }
+
+            std::cout << "Enter the password: ";
+            std::cin.ignore(1, '\n'); // ignore previous '\n' character
+            std::getline(std::cin, password); // use getline not cin.getline
+
+            myfile << password << "\n";
+            std::cout << "Saved to the file" << "\n";
+
+            myfile.close();
             break;
         
         case 2:
+            myfile.open("pwd.dat", std::ios::in);
+
+            if (!myfile) {
+                std::cout << "Cannot open file" << "\n";
+                return -1;
+            }
+
+            myfile >> password;
+            std::cout << "Your password is: " << password << "\n";
+            myfile.close();
+
             break;
+        
+        default:
+            std::cout << "Invalid option" << "\n";
     } 
     return 0;
 }
