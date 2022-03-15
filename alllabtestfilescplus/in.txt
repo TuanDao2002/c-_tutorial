@@ -1,0 +1,1 @@
+This course extends your abilities at engineering programming in C++, building on the foundation work of Computing Engineering.  It considers object-oriented programming, pointers and linked lists, engineering of software, error handling, debugging, and interaction with hardware.
