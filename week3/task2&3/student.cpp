@@ -70,8 +70,7 @@ int main() {
     s1.display();
     s2.display();
 
-    student s3("dao", 82);
-    student studentArray[3] = {s1, s2, s3};
+    student studentArray[3] = {s1, s2, student("Peter Pan", 85)};
 
     student highestScoreStudent = studentArray[0];
     for (int i = 1; i < 3; i++) {
@@ -83,7 +82,7 @@ int main() {
     std::cout << "Student with the highest score: " << "\n";
     highestScoreStudent.display();
 
-    s1.change_pwd();
-    s1.change_pwd();
+    highestScoreStudent.change_pwd();
+    highestScoreStudent.change_pwd();
     return 0;
 }
