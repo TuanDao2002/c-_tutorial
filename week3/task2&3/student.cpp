@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
-
+#include <string.h>
+#define MAX_SIZE 50
 class student {
     private:
         int score;
@@ -23,7 +24,7 @@ class student {
 
         void write_file(std::string val) {
             std::fstream myfile;
-            myfile.open(name + ".data", std::ios::out);
+            myfile.open(name + ".dat", std::ios::out);
 
             if (!myfile) {
                 std::cout << "Cannot open file" << "\n";
@@ -34,6 +35,23 @@ class student {
             
             std::cout << "Password is saved!" << "\n"; 
             myfile.close();
+        }
+
+        std::string read_file(std::string datFilename) {
+            char prev_password[MAX_SIZE];
+
+            std::fstream myfile;
+            myfile.open(datFilename + ".dat", std::ios::in);
+
+            if (!myfile) {
+                std::cerr << "Cannot open file" << "\n";
+            }
+
+            myfile.getline(prev_password, MAX_SIZE); // get a line from the file and store into prev_password
+
+            myfile.close();
+
+            return prev_password;
         }
 
         void change_pwd() {
@@ -48,7 +66,7 @@ class student {
                 std::cout << "Enter the previous password to check: ";
                 std::getline(std::cin, prev_password);
 
-                if (password != prev_password) {
+                if (read_file(name) != prev_password) {
                     std::cout << "Wrong password" << "\n";
                     return;
                 }
@@ -73,11 +91,15 @@ int main() {
     student studentArray[3] = {s1, s2, student("Peter Pan", 85)};
 
     student highestScoreStudent = studentArray[0];
-    for (int i = 1; i < 3; i++) {
+    std::cout << "All students in the array:\n";
+    for (int i = 0; i < 3; i++) {
+        studentArray[i].display();
         if (studentArray[i].get_score() > highestScoreStudent.get_score()) {
             highestScoreStudent = studentArray[i];
         }
     }
+
+    std::cout  << "\n";
 
     std::cout << "Student with the highest score: " << "\n";
     highestScoreStudent.display();
