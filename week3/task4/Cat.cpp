@@ -4,7 +4,7 @@ class Cat {
     public:
         std::string name;
         int age;
-        Cat(){};
+        Cat(){}; // default constructor with no parameter (needed for person class)
         Cat(std::string name_val, int age_val) {
             name = name_val;
             age = age_val;
@@ -19,7 +19,7 @@ class person {
     public:
         Cat cat;
         std::string name;
-        person(){};
+
         person(Cat cat_obj, std::string name_val) {
             cat = cat_obj;
             name = name_val;
