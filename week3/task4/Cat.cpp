@@ -14,7 +14,7 @@ class Cat {
             std::cout << "Cat named: " << name << "\tAge: " << age << "\n"; 
         }
 };
-
+    
 class person {
     public:
         Cat cat;
