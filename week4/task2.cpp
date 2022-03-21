@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string.h>
 
-// using string array
+// using string c++
 #if 0
 int main() {
     std::string str1, str2;
