@@ -35,8 +35,8 @@ class ComplNum {
         // double - object
         friend ComplNum operator - (double val, ComplNum num);
 
-        // object--
-        ComplNum operator -- (int) {
+        // object-- 
+        ComplNum operator -- (int) { // always int as the argument
             ComplNum temp = *this;
             this->real--;
 
@@ -46,7 +46,7 @@ class ComplNum {
 
         // --object
         ComplNum operator -- () {
-            real--;
+            --this->real;
 
             // return the value after decreasing
             return *this;
@@ -56,17 +56,8 @@ class ComplNum {
         friend double absolute(ComplNum num);
 
         void display() {
-            std::string real_val = std::to_string(this->real);
-            if (this->real < 0) {
-                real_val = "(" + std::to_string(this->real) + ")";
-            }
-
-            std::string img_val = std::to_string(this->img);
-            if (this->img < 0) {
-                img_val = "(" + std::to_string(this->img) + ")";
-            }
-
-            std::cout << real_val << " + " << img_val << "i";
+            std::cout << std::noshowpos << this->real;
+            std::cout << std::showpos << " " << this->img << "i";  
         }
 };
 
@@ -85,7 +76,7 @@ double absolute(ComplNum num) {
 }
 
 int main() {
-    ComplNum c1(1, 2), c2(3, 4);
+    ComplNum c1(-1, 2), c2(3, 4);
 
     std::cout << "c1: ";
     c1.display();
@@ -117,6 +108,10 @@ int main() {
     res = c1--;
     std::cout << "c1--: ";
     res.display();
+    std::cout << "\n\n";
+
+    std::cout << "c1: ";
+    c1.display();
     std::cout << "\n\n";
 
     // test --obj
