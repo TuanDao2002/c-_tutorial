@@ -2,14 +2,14 @@
 #include <fstream>
 #include <string.h>
 #define MAX_SIZE 50
-class student {
+class Student {
     private:
         int score;
         std::string password;
 
     public:
         std::string name;
-        student(std::string name_val, int score_val) {
+        Student(std::string name_val, int score_val) {
             name = name_val;
             score = score_val;
         }
@@ -82,15 +82,15 @@ class student {
 };
 
 int main() {
-    student s1("tuan", 80);
-    student s2("khatun", 81);
+    Student s1("tuan", 80);
+    Student s2("khatun", 81);
 
     s1.display();
     s2.display();
 
-    student studentArray[3] = {s1, s2, student("Peter Pan", 85)};
+    Student studentArray[3] = {s1, s2, Student("Peter Pan", 85)};
 
-    student highestScoreStudent = studentArray[0];
+    Student highestScoreStudent = studentArray[0];
     std::cout << "All students in the array:\n";
     for (int i = 0; i < 3; i++) {
         studentArray[i].display();

@@ -15,12 +15,12 @@ class Cat {
         }
 };
     
-class person {
+class Person {
     public:
         Cat cat;
         std::string name;
 
-        person(Cat cat_obj, std::string name_val) {
+        Person(Cat cat_obj, std::string name_val) {
             cat = cat_obj;
             name = name_val;
         };
@@ -32,16 +32,16 @@ class person {
 
 int main() {
     Cat c1("hello kitty", 2);
-    person p1(c1, "tuan");
+    Person p1(c1, "tuan");
 
     Cat c2("emma", 3);
-    person p2(c2, "khatun");
+    Person p2(c2, "khatun");
 
     Cat c3("lily", 1);
-    person p3(c3, "daotuan");
+    Person p3(c3, "daotuan");
 
-    person personArray[3] = {p1, p2, p3};
-    person personWithOldestCat = personArray[0];
+    Person personArray[3] = {p1, p2, p3};
+    Person personWithOldestCat = personArray[0];
 
     for (int i = 0; i < 3; i++) {
         if (personArray[i].cat.age > personWithOldestCat.cat.age) {
