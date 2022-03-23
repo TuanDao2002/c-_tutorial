@@ -15,10 +15,10 @@ class ComplNum {
 
         // object - object
         // cannot use arrow for temp and obj as they do not have "this" pointer
-        ComplNum operator - (ComplNum obj) {
+        ComplNum operator - (ComplNum num) {
             ComplNum temp;
-            temp.real = this->real - obj.real;
-            temp.img = this->img - obj.img;
+            temp.real = this->real - num.real;
+            temp.img = this->img - num.img;
 
             return temp;
         }
@@ -33,7 +33,7 @@ class ComplNum {
         }
 
         // double - object
-        friend ComplNum operator - (double val, ComplNum obj);
+        friend ComplNum operator - (double val, ComplNum num);
 
         // object--
         ComplNum operator -- (int) {
@@ -53,7 +53,7 @@ class ComplNum {
         }
 
         // method to get absolute value of complex number
-        friend double absolute(ComplNum &obj);
+        friend double absolute(ComplNum num);
 
         void display() {
             std::string real_val = std::to_string(this->real);
@@ -71,17 +71,17 @@ class ComplNum {
 };
 
 // define for double - obj
-ComplNum operator - (double val, ComplNum obj) {
+ComplNum operator - (double val, ComplNum num) {
     ComplNum temp;
-    temp.real = val - obj.real;
-    temp.img = 0 - obj.img;
+    temp.real = val - num.real;
+    temp.img = 0 - num.img;
 
     return temp;
 };
 
 // define for absolute
-double absolute(ComplNum &obj) {
-    return sqrt(pow(obj.real, 2) + pow(obj.img, 2));
+double absolute(ComplNum num) {
+    return sqrt(pow(num.real, 2) + pow(num.img, 2));
 }
 
 int main() {
