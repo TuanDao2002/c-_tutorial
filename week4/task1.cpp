@@ -15,7 +15,7 @@ class ComplNum {
 
         // object - object
         // cannot use arrow for temp and obj as they do not have "this" pointer
-        ComplNum operator - (ComplNum &obj) { // pass by referece
+        ComplNum operator - (ComplNum obj) {
             ComplNum temp;
             temp.real = this->real - obj.real;
             temp.img = this->img - obj.img;
@@ -33,7 +33,7 @@ class ComplNum {
         }
 
         // double - object
-        friend ComplNum operator - (double val, ComplNum &obj);
+        friend ComplNum operator - (double val, ComplNum obj);
 
         // object--
         ComplNum operator -- (int) {
@@ -71,7 +71,7 @@ class ComplNum {
 };
 
 // define for double - obj
-ComplNum operator - (double val, ComplNum &obj) {
+ComplNum operator - (double val, ComplNum obj) {
     ComplNum temp;
     temp.real = val - obj.real;
     temp.img = 0 - obj.img;
