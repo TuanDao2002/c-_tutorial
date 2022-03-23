@@ -7,8 +7,8 @@ class ComplNum {
         double img;
 
     public: 
-        ComplNum(){}
-        ComplNum(double real, double img) {
+        ComplNum(){} // default constructor
+        ComplNum(double real, double img) { // constructor 
             this->real = real;
             this->img = img;
         }
@@ -89,41 +89,41 @@ int main() {
 
     std::cout << "c1: ";
     c1.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     std::cout << "c2: ";
     c2.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     // test obj - obj
     ComplNum res = c1 - c2;
     std::cout << "c1 - c2: ";
     res.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     // test obj - double
     res = c2 - 2.5;
     std::cout << "c2 - 2.5: ";
     res.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     // test double - obj
     res = 3.5 - c1;
     std::cout << "3.5 - c1: ";
     res.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     // test obj--
     res = c1--;
     std::cout << "c1--: ";
     res.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     // test --obj
     res = --c2;
     std::cout << "--c2: ";
     res.display();
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     std::cout << "Absolute of c2: " << absolute(c2) << "\n";
 
