@@ -41,6 +41,7 @@ int main() {
     // log out error if dynamic memory allocation failed
     if (book1 == NULL) {
         std::cerr << "Dynamic memory allocation failed" << std::endl;
+        return -1;
     }
 
     book1->display(); // (*book1).display() is the same
