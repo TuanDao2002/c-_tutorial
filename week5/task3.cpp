@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string.h>
 
+#define STRSIZE 100
+
 // cannot use std::string as it is an object inside union
 union Students {
-    char firstName[50];
-    char fullName[50];
+    char firstName[STRSIZE];
+    char fullName[STRSIZE];
 };
 
 int main() {
@@ -13,13 +15,18 @@ int main() {
     // question a
     union Students student_arr[SIZE];
     for (int i = 0; i < SIZE; i++) {
-        // use strcpy to copy the string to char array
-        strcpy(student_arr[i].fullName, "dao kha ");
+        // // use strcpy to copy the string to char array
+        // strcpy(student_arr[i].fullName, "dao kha ");
 
-        // use strcat to concat the string to char array
-        // convert int to const char* so it can be concated
-        // using std::to_string(number: int).c_str()
-        strcat(student_arr[i].fullName, std::to_string(i + 1).c_str());
+        // // use strcat to concat the string to char array
+        // // convert int to const char* so it can be concated
+        // // using std::to_string(number: int).c_str()
+        // strcat(student_arr[i].fullName, std::to_string(i + 1).c_str());
+
+        std::cout << "Enter full name for student " << i + 1 << ": ";
+        do {
+            std::cin.getline(student_arr[i].fullName, sizeof(student_arr[i].fullName));
+        } while (strlen(student_arr[i].fullName) == 0);
     }
     // question b
     for (auto s : student_arr) {
