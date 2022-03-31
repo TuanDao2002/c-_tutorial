@@ -1,5 +1,5 @@
-#include<iostream>
-#include<math.h>
+#include <iostream>
+#include <math.h>
 int main() {
     using namespace std;
     float a, b, c;
