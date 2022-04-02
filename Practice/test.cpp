@@ -61,10 +61,6 @@ public:
     // Destructor
     ~Juice()
     {
-				// std::cout << name << " " << price << std::endl;
-				// if (price != NULL) {
-				// 	delete price;
-				// }
 
 			delete price;
     }
@@ -86,15 +82,15 @@ int main(int argc, char *argv[])
     const int SIZE = 3;
     Juice *arr = new Juice [SIZE] {Juice("Apple", 50), Juice("Watermelon", 22), Juice("Orange", 33)};
 
-    for (int i = 0; i < SIZE; i++)
+    for (Juice juice : {arr[0], arr[1], arr[2]})
     {
-        arr[i].display();
+        juice.display();
     }
 
     // Question B
     Juice juice1("Kiwi", 100);
-    Juice juice2("Kiwi", 50);
-    Juice juice_temp = juice1--;
+    Juice juice2("Kiwi", 80);
+    Juice juice_temp = juice2--;
     juice_temp.display();
 
     Juice juice3 = juice1 + juice2;
