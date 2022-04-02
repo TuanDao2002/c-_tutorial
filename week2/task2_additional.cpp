@@ -6,7 +6,7 @@ bool is_float(char* float_str) {
     bool dot_flag = false;
     for (int i = 0; i < len; i++) {
         // continue if there is negative sign at the beginning
-        if (i == 0 && float_str[i] == '-') {
+        if (i == 0 && (float_str[i] == '-' || float_str[i] == '+')) {
             continue;
         }
 
@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
         *(float_arr + i - 1) = atof(argv[i]);
     }
 
-    for (int j = 0; j < 10; j++) {
-        std::cout << "Valid float: " << *(float_arr + j) << "\n";
+    for (int j = 1; j < argc; j++) {
+        std::cout << "Valid float: " << *(float_arr + j - 1) << "\n";
     }
 
     return  0;

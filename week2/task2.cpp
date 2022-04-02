@@ -6,7 +6,7 @@ bool is_integer(char* int_str) {
     int len = std::string(int_str).length();
     for (int i = 0; i < len; i++) {
         // continue if there is negative sign at the beginning
-        if (i == 0 && int_str[i] == '-') {
+        if (i == 0 && (int_str[i] == '-' || int_str[i] == '+')) {
             continue;
         }
 
@@ -35,8 +35,8 @@ int main(int argc, char* argv[]) {
     }
 
     
-    for (int j = 0; j < 5; j++) {
-        std::cout << "Valid integer: " << *(int_arr + j) << "\n";
+    for (int j = 1; j < argc; j++) {
+        std::cout << "Valid integer: " << *(int_arr + j - 1) << "\n";
     }
 
     return  0;

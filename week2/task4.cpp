@@ -8,8 +8,8 @@ int main(){
     std::cout << std::noshowpos << 200 << "\n\n";
 
     // b) print 10 and 200 left justified with 5-character width
-    std::cout << std::setw(5) << std::left << 10
-                              << 200 << "*\n\n"; // * is used to mark the spaces
+    std::cout << std::setfill('x') << std::setw(5) << std::left << 10
+                                   << std::setw(5)<< 200 << "*\n\n"; // * is used to mark the spaces
 
     char hexachar[6] = {'A', 'B', 'C', 'E', 'F'};
     int hexavalue[6] = {10, 11, 12, 13, 14, 15};
