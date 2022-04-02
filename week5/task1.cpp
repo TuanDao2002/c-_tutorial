@@ -15,15 +15,25 @@ class Book {
             this->price = new int(price);
         }
 
+        Book (const Book& book) {
+            name = new std::string(*(book.name));
+            price = new int(*(book.price));
+        }
+
         void display() {
             // access pointer of "name" attribute
             std::cout << "Name: " << *name << "\tPrice: " << *price << std::endl;
         }
 
         ~Book() {
-            std::cout << *name << " deleted\n";
             delete price;
             delete name;
+        }
+
+        Book operator++ (int) {
+            Book temp = *this;
+            (*price)--;
+            return temp;
         }
 };
 
@@ -86,6 +96,11 @@ int main() {
 
     // delete dynamic array
     delete[] books;
+
+    Book test = Book("test", 100);
+    Book temp = test++;
+    temp.display();
+    test.display();
     return 0;
 }
 #endif
