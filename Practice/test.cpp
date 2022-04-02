@@ -19,17 +19,17 @@ public:
         this->price = new int(price);
     }
 
-    // // copy constructor
-    // Juice(const Juice& juice) {
-    //     this->name = juice.name;
-    //     int old_price = *juice.price;
-    //     this->price = new int(old_price);
-    // }
+    // copy constructor
+    Juice(const Juice& juice) {
+        this->name = juice.name;
+        int old_price = *juice.price;
+        this->price = new int(old_price);
+    }
 
     // Display method
     void display()
     {
-        std::cout << "Juice: " << name << std::endl;
+        std::cout << "Juice name: " << name << std::endl;
         std::cout << "Price: " << *price << std::endl;
         std::cout << std::endl;
     }
@@ -87,6 +87,8 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < SIZE; i++)
     {
+        std::cout << &arr[i] << "\n";
+        std::cout << sizeof(arr[i]) << "\n";
         arr[i].display();
     }
 
@@ -96,11 +98,15 @@ int main(int argc, char *argv[])
     Juice juice_temp = juice1--;
     juice_temp.display();
 
+    std::cout << &juice1 << " " << &juice2 << std::endl;
+
     Juice juice3 = juice1 + juice2;
     juice3.display();
 
     Juice juice4 = 50 - juice2;
     juice4.display();
+
+    std::cout << &juice3 << " " << &juice4 << std::endl;
 
     delete[] arr;
 
