@@ -61,7 +61,12 @@ public:
     // Destructor
     ~Juice()
     {
-        delete price;
+				// std::cout << name << " " << price << std::endl;
+				// if (price != NULL) {
+				// 	delete price;
+				// }
+
+			delete price;
     }
 
     // Overload operators n - juice
@@ -79,16 +84,10 @@ int main(int argc, char *argv[])
 {
     // Question A
     const int SIZE = 3;
-    Juice *arr = new Juice [SIZE];
-
-    arr[0] = Juice("Apple", 50);
-    arr[1] = Juice("Watermelon", 33);
-    arr[2] = Juice("Orange", 22);
+    Juice *arr = new Juice [SIZE] {Juice("Apple", 50), Juice("Watermelon", 22), Juice("Orange", 33)};
 
     for (int i = 0; i < SIZE; i++)
     {
-        std::cout << &arr[i] << "\n";
-        std::cout << sizeof(arr[i]) << "\n";
         arr[i].display();
     }
 
@@ -98,15 +97,11 @@ int main(int argc, char *argv[])
     Juice juice_temp = juice1--;
     juice_temp.display();
 
-    std::cout << &juice1 << " " << &juice2 << std::endl;
-
     Juice juice3 = juice1 + juice2;
     juice3.display();
 
     Juice juice4 = 50 - juice2;
     juice4.display();
-
-    std::cout << &juice3 << " " << &juice4 << std::endl;
 
     delete[] arr;
 
