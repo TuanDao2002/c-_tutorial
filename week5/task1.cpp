@@ -26,6 +26,7 @@ class Book {
         }
 
         ~Book() {
+            std::cout << "delete" << std::endl;
             delete price;
             delete name;
         }
