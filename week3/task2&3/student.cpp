@@ -89,7 +89,7 @@ int main() {
     s1.display();
     s2.display();
 
-    Student studentArray[3] = {s1, s2, Student("Peter Pan", 85)};
+    Student studentArray[3] = {s1, s2, Student("Peter", 85)};
 
     Student highestScoreStudent = studentArray[0];
     std::cout << "All students in the array:\n";
