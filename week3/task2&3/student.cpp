@@ -5,7 +5,6 @@
 class Student {
     private:
         int score;
-        std::string password;
 
     public:
         std::string name;
