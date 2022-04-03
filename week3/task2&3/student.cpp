@@ -31,7 +31,7 @@ class Student {
                 return;
             }
             
-            myfile << password << "\n";
+            myfile << val << "\n";
             
             std::cout << "Password is saved!" << "\n"; 
             myfile.close();
@@ -55,6 +55,7 @@ class Student {
         }
 
         void change_pwd() {
+            std::string password = read_file(name);
             if (password.empty()) {
                 std::cout << "Enter a password: ";
                 std::getline(std::cin, password); // only use cin.ignore when we use std::cin before std::getline
@@ -104,7 +105,6 @@ int main() {
     std::cout << "Student with the highest score: " << "\n";
     highestScoreStudent.display();
 
-    highestScoreStudent.change_pwd();
     highestScoreStudent.change_pwd();
     return 0;
 }
