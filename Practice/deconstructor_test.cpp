@@ -16,6 +16,11 @@ public:
         arr = new int[1000]; //dynamic memory allocation with the heap
     }; 
 
+    Data(const Data& data) {
+        this->name = data.name;
+        this->arr = new int[1000];
+    }
+
     ~Data() { // destructor
         std::cout << "Destructor of " << name  << " is called \n";
         delete[] arr; //comment out this one will cause Memory Leak (computer hang)
