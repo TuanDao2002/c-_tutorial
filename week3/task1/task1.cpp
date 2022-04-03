@@ -22,8 +22,9 @@ int main(){
             }
 
             std::cout << "Enter the password: ";
-            std::cin.ignore(1, '\n'); // ignore previous '\n' character
-            std::getline(std::cin, password); // use getline not cin.getline
+            do {
+                std::getline(std::cin, password); // use getline not cin.getline
+            } while (password.length() == 0);
 
             myfile << password << "\n";
             std::cout << "Saved to the file!" << "\n";
