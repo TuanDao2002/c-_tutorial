@@ -46,7 +46,7 @@ bool is_double(const char* float_str) {
 }
 
 // doubleVal version that takes integer version
-double doubleVal(int integer) {
+int doubleVal(int integer) {
     return integer * 2;
 }
 
@@ -57,7 +57,7 @@ double doubleVal(double double_num) {
 }
 
 // doubleVal version that takes hexadecimal string version
-double doubleVal(std::string hex_num) {
+int doubleVal(std::string hex_num) {
     std::stringstream ss;
     int value;
 
