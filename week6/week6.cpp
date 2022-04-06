@@ -4,100 +4,83 @@
 #define DELETE_INDEX 1
 
 class Person{
-    protected:
+    public:
         std::string name = "hello";
         int age = 22;
 
-    public:
+        Person() {
+            // std::cout << "Constructor of Person is called" << std::endl;
+        }
+
         ~Person() {
-            // std::cout << "Person destroy" << std::endl;
+            // std::cout << "\nDestructor of Person is called" << std::endl;
         }
 };
 
 class Student : public Person{
-    protected:
-        int studentID = 1;
-    
-        // setters and getters of parent members should belong to one class only to prevent ambiguos in Tutor class
-        void setName(std::string name) {
-            this->name = name;
-        }
-
-        void setAge(int age) {
-            this->age = age;
-        }
-
-        std::string getName() {
-            return name;
-        }
-
-        int getAge() {
-            return age;
-        }
-    
     public:
+        int studentID = 1;
+
+        Student() {
+            // std::cout << "Constructor of Student is called" << std::endl;
+        }
+
         ~Student() {
-            // std::cout << "Student destroy" << std::endl;
+            // std::cout << "\nDestructor of Student is called" << std::endl;
         }
 };
 
 class Staff : public Person{
-    protected:
+    public:
         int staffID = 2;
 
-    public:
+        Staff() {
+            // std::cout << "Constructor of Staff is called" << std::endl;
+        }
+
         ~Staff() {
-            // std::cout << "Staff destroy" << std::endl;
+            // std::cout << "\nDestructor of Staff is called" << std::endl;
         }
 };
 
-class Tutor : Student, Staff{
+class Tutor : public Student, public Staff{
     public:
-        Tutor(){}
-
-        Tutor(std::string name, int age, int studentID, int staffID){
-            setName(name);
-            setAge(age);
-            this->studentID = studentID;
-            this->staffID = staffID;
-        }
-
         void consultation() {
-            std::cout << "Name: " << getName() << std::endl
-                      << "Age: " << getAge() << std::endl
-                      << "Student ID = " << studentID << std::endl
-                      << "Staff ID = " << staffID << std::endl;
+           std::cout << "Consultation!! " << std::endl;
         };
 
-        // Tutor will be destroyed first, then Student and Staff, when Student or Staff is destroyed, Person will be destroyed also => Person will be destoryed for each Student or Staff
+        Tutor() {
+            // std::cout << "Constructor of Tutor is called" << std::endl;
+        }
+
+        Tutor(int studentID, int staffID) {
+            this->studentID = studentID;
+            this->staffID = staffID;
+            // std::cout << "Constructor of Tutor is called" << std::endl;
+        }
+
         ~Tutor() {
-            // std::cout << "Tutor destroy" << std::endl;
+            // std::cout << "\nDestructor of Tutor is called" << std::endl;
+        }
+
+        void showInfo() {
+            std::cout << "staffID = " << staffID << std::endl
+                      << "studentID = " << studentID << std::endl;
         }
 };
 
 int main() {
     Tutor t;
-    t.consultation();
 
-    std::cout << "\n";
+    // does not define the size
+    std::vector<Tutor> tutors = {
+        Tutor(123, 99999),
+        Tutor(222, 93232),
+        Tutor(212, 23434),
+    };
 
-    Tutor t1("tuan", 20, 3877347, 384);
-    Tutor t2("dao", 21, 3877341, 314);
-    Tutor t3("kha", 22, 3877337, 334);
-
-    std::vector<Tutor> tutorVector = {t1, t2, t3};
-
-    for (Tutor t : tutorVector) {
-        t.consultation();
-        std::cout << "\n";
-    }
-
-    tutorVector.erase(tutorVector.begin() + DELETE_INDEX);
-
-    std::cout << "Tutor vector after deleting second object: \n";
-    for (Tutor t : tutorVector) {
-        t.consultation();
-        std::cout << "\n";
+    for (Tutor eachTutor : tutors) {
+        eachTutor.showInfo();
     }
     return 0;
 }
