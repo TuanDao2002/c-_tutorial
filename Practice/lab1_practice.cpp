@@ -44,6 +44,10 @@ class Student{
                       << "Name: " << *name << std::endl;
         }
 
+        std::string getName() {
+            return *this->name;
+        }
+
         ~Student() {
             delete name;
         }
@@ -90,11 +94,14 @@ class Course{
             return *this;
         }
 
-
         void showInfo() {
             std::cout << "Course ID: " << courseID << std::endl
                       << "Name: " << *name << std::endl
                       << "Credit: " << credit << std::endl;
+        }
+
+        std::string getName() {
+            return *this->name;
         }
 
         ~Course(){
@@ -117,6 +124,14 @@ class Enrollment{
             this->semester = semeser;
         }
 
+        Student getStudent() {
+            return this->student;
+        }
+
+        Course getCourse() {
+            return this->course;
+        }
+
         void showInfo() {
             std::cout << "Enrollment's info: \n";
             student.showInfo();
@@ -133,14 +148,14 @@ int main(){
     Enrollment e1 = Enrollment(s1, c1, "2022A");
     e1.showInfo();
 
-    std::ifstream infile("default.csv");
+    Enrollment* enrollment_arr = new (std::nothrow) Enrollment[5];
 
+    std::ifstream infile("default.csv");
     std::string line;
     std::string temp_sid, temp_student_name, temp_cid, temp_course_name, temp_credit, temp_sem;
 
-    std::cout << "List of enrollments: " << std::endl;
+    int indx = 0;
     while (std::getline(infile, line)) {
-        std::cout << "-----------------\n\n";
         // use stringstream as local variable to assign attributes for different lines
         std::stringstream ss(line);
 			
@@ -152,15 +167,34 @@ int main(){
 
 
         std::getline(ss, temp_credit, ',');
-        ss >> temp_sem;
+        std::getline(ss, temp_sem, ',');
 
         Student s = Student(temp_sid, temp_student_name);
         Course c = Course(temp_cid, temp_course_name, stoi(temp_credit));
 
-        Enrollment e = Enrollment(s, c, temp_sem);
-        e.showInfo();
+        enrollment_arr[indx] = Enrollment(s, c, temp_sem);
+        indx++;
     }
 
+    std::string course_name;
+    std::cout << "Enter a the name of the course: " << std::endl;
+    std::getline(std::cin, course_name);
+
+    bool empty = true;
+    std::cout << "\nList of enrollments in the course: " << std::endl;
+    for (int i = 0; i < 5; i++) {
+        if (enrollment_arr[i].getCourse().getName() == course_name) {
+            std::cout << "-----------------\n\n";
+            enrollment_arr[i].showInfo();
+            empty = false;
+        }
+    }
+
+    if (empty) {
+        std::cout << "The course list is empty!!!" << std::endl;
+    }
+
+    delete[] enrollment_arr;
     infile.close();
     return 0;
 }
