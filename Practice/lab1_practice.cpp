@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 class Student{
     private:
@@ -40,8 +41,8 @@ class Student{
         }
 
         void showInfo() {
-            std::cout << "Student ID: " << studentID << std::endl
-                      << "Name: " << *name << std::endl;
+            std::cout << std::setw(15) << std::left << studentID
+                      << std::setw(20) << std::left << *name;
         }
 
         std::string getName() {
@@ -95,9 +96,9 @@ class Course{
         }
 
         void showInfo() {
-            std::cout << "Course ID: " << courseID << std::endl
-                      << "Name: " << *name << std::endl
-                      << "Credit: " << credit << std::endl;
+            std::cout << std::setw(15) << std::left << courseID 
+                      << std::setw((*name).length() + 5) << std::left << *name 
+                      << std::setw(6) << std::right << credit;
         }
 
         std::string getName() {
@@ -133,12 +134,9 @@ class Enrollment{
         }
 
         void showInfo() {
-            std::cout << "Enrollment's info: \n";
             student.showInfo();
-            std::cout << "\n";
             course.showInfo();
-            std::cout << "\n";
-            std::cout << "Semester: " << semester << "\n\n";
+            std::cout << std::setw(12) << std::right << semester << "\n";
         }
 };
 
@@ -182,16 +180,21 @@ int main(){
 
     bool empty = true;
     std::cout << "\nList of enrollments in the course: " << std::endl;
+    std::cout << std::setw(15) << std::left << "Student ID" 
+              << std::setw(20) << std::left << "Student name" 
+              << std::setw(15) << std::left << "Course ID" 
+              << std::setw(course_name.length() + 5) << std::left << "Course name"
+              << std::setw(6) << std::left << "Credit" 
+              << std::setw(15) << std::right << "Semester" << std::endl;
     for (int i = 0; i < 5; i++) {
         if (enrollment_arr[i].getCourse().getName() == course_name) {
-            std::cout << "-----------------\n\n";
             enrollment_arr[i].showInfo();
             empty = false;
         }
     }
 
     if (empty) {
-        std::cout << "The course list is empty!!!" << std::endl;
+        std::cout << "The list is empty!!!" << std::endl;
     }
 
     delete[] enrollment_arr;
