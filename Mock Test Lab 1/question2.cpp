@@ -25,14 +25,11 @@ class Student{
 
 		Student(){}
 
-		// setter for name attribute
-		void setName(std::string name) {
+		Student(std::string name, int scores[]) {
 			this->name = name;
-		}
-
-		// setter for the score of the Student object based on the index of array "scores"
-		void setEachScore(int score, int index) {
-			scores[index] = score;
+			for (int i = 0; i < SCORE_SIZE; i++) {
+				this->scores[i] = scores[i];
+			}
 		}
 
 		void inputData() {
@@ -117,29 +114,26 @@ int main(){
 	// dynamic array of 10 students
 	Student *arr = new Student[10];
 	
-	std::ifstream input;
-	input.open("data.txt");
+	std::ifstream infile;
+	infile.open("data.txt");
 
-	if (!input) {
+	if (!infile) {
 		std::cerr << "Cannot open file" << std::endl;
 	}
 
-	std::string temp;
+	std::string temp_name;
+	int temp_arr[SCORE_SIZE];
 	int count = 1;
 	for (int i = 0; i < 10; i++) {
-		std::getline(input, temp, ','); // get the first argument before comma "," to assign to the name of Student object
-		arr[i].setName(temp);
+		std::getline(infile, temp_name, ','); // get the first argument before comma "," to assign to the name of Student object
 
-		// use stringstream to get all 3 scores of Student object
-		std::stringstream ss;
-		std::getline(input, temp);
-		ss.str(temp);
-
-		int score_temp;
 		for (int j = 0; j < SCORE_SIZE; j++) {
-			ss >> score_temp;
-			arr[i].setEachScore(score_temp, j);
+			infile >> temp_arr[j];
 		}
+
+		infile.ignore();
+
+		arr[i] = Student(temp_name, temp_arr);
 	}
 
 	Student highest_avg_stu = arr[0];
@@ -152,7 +146,7 @@ int main(){
 	std::cout << "Info of student with the highest average score: " << std::endl;
 	highest_avg_stu.showInfo();
 
-	input.close();
+	infile.close();
 	delete[] arr;
 	return 0;
 }

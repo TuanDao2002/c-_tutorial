@@ -57,11 +57,11 @@ double doubleVal(double double_num) {
 }
 
 // doubleVal version that takes hexadecimal string version
-int doubleVal(std::string hex_num) {
+int doubleVal(std::string hex_str) {
     std::stringstream ss;
     int value;
 
-    ss << std::hex << hex_num;
+    ss << std::hex << hex_str;
     ss >> value;
 
     value *= 2;
@@ -82,7 +82,7 @@ int main(int argc, const char* argv[]){
     } else if (is_double(argv[1])){ // if the string is double, use the second version of doubleVal
         std::cout << std::fixed << std::setprecision(2) << doubleVal(atof(argv[1])) << std::endl;
     } else { // otherwise, use the third version of doubleVal
-        std::cout << std::hex << std::showbase << int(doubleVal(argv[1])) << std::endl;
+        std::cout << std::hex << std::showbase << doubleVal(argv[1]) << std::endl;
     }
 
     return 0;
