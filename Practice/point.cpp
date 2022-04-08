@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <fstream>
 
 class Point{
     private:
@@ -36,6 +37,16 @@ class Point{
         friend std::istream &operator >> (std::istream &in, Point &point);
         friend std::ostream &operator << (std::ostream &out, Point &point);
         friend double distance(Point p1, Point p2);
+        friend Point operator + (double num, Point point);
+        friend Point operator + (int num, Point point);
+
+        Point operator + (double num) {
+            Point temp;
+            temp.x = x + num;
+            temp.y = y + num;
+            
+            return temp;
+        }
 
         Point operator + (Point &point) {
             Point result;
@@ -51,9 +62,25 @@ class Point{
             return result;
         }
 
+        Point operator ++ () {
+            x++;
+            y++;
+
+            return *this;
+        }
+
+        Point operator ++ (int) {
+            Point temp = *this;
+
+            x++;
+            y++;
+
+            return temp;
+        }
+
         std::string toString() {
             std::stringstream sstr;
-            sstr << "Point's coordinates: " << x << " " << y;
+            sstr << "x = " << x << ", y = " << y;
             return sstr.str();
         }
 };
@@ -79,6 +106,22 @@ double distance(Point p1, Point p2) {
     return distance_val;
 }
 
+Point operator + (double num, Point point) {
+    Point temp;
+    temp.x = num + point.x;
+    temp.y = num + point.y;
+
+    return temp;
+}
+
+Point operator + (int num, Point point) {
+    Point temp;
+    temp.x = num + point.x;
+    temp.y = num + point.y;
+
+    return temp;
+}
+
 int main(){
     Point p1, p2;
     std::cin >> p1;
@@ -94,5 +137,40 @@ int main(){
     std::cout << "p1 - p2 => " << minus_point << std::endl;
 
     std::cout << "Distance between p1 and p2: " << distance(p1, p2) << std::endl;
+
+    std::cout << "\n10 + p1 => " << (10 + p1).toString() << std::endl;
+    std::cout << "11.2 + p2 => " << (11.2 + p2).toString() << std::endl;
+
+    std::cout << "\np1 + 10 => " << (p1 + 10).toString() << std::endl;
+
+    std::cout << "\np1++ => " << (p1++).toString() << std::endl;
+    std::cout << "p1 => " << p1.toString() << std::endl;
+    std::cout << "++p1 => " << (++p1).toString() << std::endl;
+
+    Point *point_arr = new Point[6];
+
+    std::ifstream infile("points.txt");
+    if (!infile) {
+        std::cerr << "Cannot open file!!!" << std::endl;
+        delete[] point_arr;
+        return -1;
+    }
+
+    std::string tempStr;
+    std::string x_temp, y_temp;
+    for (int i = 0; i < 6; i++) {
+        // sstr.clear();
+        std::getline(infile, x_temp, ',');
+        std::getline(infile, y_temp);
+
+        point_arr[i] = Point(stof(x_temp), stof(y_temp));
+    }
+
+    std::cout << "\n\nList of points in points.txt: " << std::endl;
+    for (int i = 0; i < 6; i++) {
+        std::cout << point_arr[i].toString() << std::endl;
+    }
+
+    delete[] point_arr;
     return 0;
 }
