@@ -13,8 +13,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <cstring>
 
 #define SCORE_SIZE 3
+#define STRSIZE 100
 
 class Student{
 	private:
@@ -33,8 +36,12 @@ class Student{
 		}
 
 		void inputData() {
+			char temp[STRSIZE];
 			std::cout << "Enter name: ";
-			std::getline(std::cin, name);
+			do {
+				std::cin.getline(temp, sizeof(temp));
+			} while (strlen(temp) == 0);
+			this->name = temp;
 
 			for (int i = 0; i < SCORE_SIZE; i++) {
 				std::cout << "Enter score " << i + 1 << " : ";
