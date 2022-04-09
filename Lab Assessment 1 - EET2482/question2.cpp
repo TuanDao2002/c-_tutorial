@@ -16,6 +16,8 @@
 #include <sstream>
 #include <fstream>
 
+#define STRSIZE 100;
+
 int main(){
 
     return 0;
