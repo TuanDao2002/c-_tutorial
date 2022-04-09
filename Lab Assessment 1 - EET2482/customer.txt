@@ -1,0 +1,4 @@
+Name: tuan, Password: 123, Wallet ID: 234, Balance: 0
+Name: dao, Password: 122, Wallet ID: 235, Balance: 300
+Name: kha, Password: 124, Wallet ID: 236, Balance: 310
+Name: khatun, Password: 125, Wallet ID: 237, Balance: 1280
