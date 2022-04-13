@@ -1,5 +1,5 @@
 #include <iostream>
-#include "LinkedList.cpp"
+#include "LinkedList.cpp" // not include header file "LinkedList.h" but have to include "LinkedList.cpp" to use LinkedList
 int main() {
 	LinkedList list = LinkedList(12);
 	list.headInsert(99);
