@@ -1,4 +1,4 @@
-#include "node.cpp"
+#include "node.h"
 class LinkedList{
     private:
         node* head; // pointer of the head node
