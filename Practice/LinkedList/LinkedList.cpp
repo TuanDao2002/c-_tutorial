@@ -1,28 +1,33 @@
 #include <iostream> // include iostream to use NULL
 #include "LinkedList.h"
 
-LinkedList::LinkedList() {
+template <class X> 
+LinkedList<X>::LinkedList() {
     head = NULL;
 };
 
-LinkedList::LinkedList(int newData) {
-    head = new node(newData, NULL);
+template <class X> 
+LinkedList<X>::LinkedList(X newData) {
+    head = new node<X>(newData, NULL);
 }
 
-LinkedList::~LinkedList(){
+template <class X> 
+LinkedList<X>::~LinkedList(){
     clear();
 }
 
-void LinkedList::headInsert(int newData) {
-    node* newHead = new node(newData);    
+template <class X> 
+void LinkedList<X>::headInsert(X newData) {
+    node<X>* newHead = new node<X>(newData);    
     newHead->setNext(head);
     head = newHead;
 }
 
-void LinkedList::tailAppend(int newData) {
-    node* newNode = new node(newData);
+template <class X> 
+void LinkedList<X>::tailAppend(X newData) {
+    node<X>* newNode = new node<X>(newData);
 
-    node* current = head;
+    node<X>* current = head;
     while (current->getNext() != NULL) {
         current = current->getNext();
     }
@@ -30,10 +35,11 @@ void LinkedList::tailAppend(int newData) {
     current->setNext(newNode);
 }
 
-void LinkedList::insertNodeAfter(node* afterMe, int newData) {
-    node* newNode = new node(newData);
+template <class X> 
+void LinkedList<X>::insertNodeAfter(node<X>* afterMe, X newData) {
+    node<X>* newNode = new node<X>(newData);
 
-    node* current = head;
+    node<X>* current = head;
     while (current != NULL) {
         if (current == afterMe) {
             newNode->setNext(current->getNext());
@@ -45,8 +51,9 @@ void LinkedList::insertNodeAfter(node* afterMe, int newData) {
     }
 }
 
-void LinkedList::removeNode(int val) {
-    node* deleteNode = NULL;
+template <class X> 
+void LinkedList<X>::removeNode(X val) {
+    node<X>* deleteNode = NULL;
 	if (head->getData() == val) {
         deleteNode = head;
         head = deleteNode->getNext();
@@ -54,7 +61,7 @@ void LinkedList::removeNode(int val) {
 		return;
     }
 
-    node* current = head;
+    node<X>* current = head;
     while (current->getNext() != NULL) {
         if (current->getNext()->getData() == val) {
             deleteNode = current->getNext();
@@ -67,8 +74,9 @@ void LinkedList::removeNode(int val) {
     }
 }
 
-void LinkedList::clear() {
-    node* current = head;
+template <class X> 
+void LinkedList<X>::clear() {
+    node<X>* current = head;
     while (current != NULL) {
         head = head->getNext();
         delete current;
@@ -76,8 +84,9 @@ void LinkedList::clear() {
     }
 }
 
-bool LinkedList::findData(int val) {
-    node* retrieveNode = findNode(val);
+template <class X> 
+bool LinkedList<X>::findData(X val) {
+    node<X>* retrieveNode = findNode(val);
     if (retrieveNode == NULL) {
         return false;
     }
@@ -85,8 +94,9 @@ bool LinkedList::findData(int val) {
     return true;
 }
 
-node* LinkedList::findNode(int val) {
-    node* current = head;
+template <class X> 
+node<X>* LinkedList<X>::findNode(X val) {
+    node<X>* current = head;
     while (current != NULL) {
         if (current->getData() == val) {
             return current;
@@ -98,9 +108,10 @@ node* LinkedList::findNode(int val) {
     return NULL;
 }
 
-int LinkedList::size() {
+template <class X> 
+int LinkedList<X>::size() {
     int count = 0;
-    node* current = head;
+    node<X>* current = head;
     while (current != NULL) {
         count++;
         current = current->getNext();
@@ -109,10 +120,10 @@ int LinkedList::size() {
     return count;
 }
 
-
-void LinkedList::printList() {
+template <class X> 
+void LinkedList<X>::printList() {
     int index = 0;
-    node* current = head;
+    node<X>* current = head;
     while (current != NULL) {
         std::cout << "Node " << index << ": " << current->getData() << std::endl;
         index++;
@@ -120,3 +131,6 @@ void LinkedList::printList() {
     }
 }
 
+// explicitly institating all relevant templates
+template class LinkedList<std::string>;
+template class LinkedList<int>;
