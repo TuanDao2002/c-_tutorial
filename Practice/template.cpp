@@ -9,7 +9,10 @@ template <> void increase<std::string>(std::string &data) {
     data += "_new";
 }
 
-//second way to override the template funcion above (only apply when no data type argument is specified when calling the function)
+//second way to override the template funcion above 
+//only apply when no data type argument is specified when calling the function 
+//and the argument variable is matched with the data type
+//(which is double in this case)
 void increase(double &data) {
     data += 100;
 }
