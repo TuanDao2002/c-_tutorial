@@ -17,7 +17,8 @@ class Person{
         }
 };
 
-class Student : public Person{
+// use virtual base class to prevent multiple inheritance ambiguosity
+class Student : virtual public Person{
     public:
         int studentID = 1;
 
@@ -30,7 +31,7 @@ class Student : public Person{
         }
 };
 
-class Staff : public Person{
+class Staff : virtual public Person{
     public:
         int staffID = 2;
 
@@ -53,9 +54,11 @@ class Tutor : public Student, public Staff{
             // std::cout << "Constructor of Tutor is called" << std::endl;
         }
 
-        Tutor(int studentID, int staffID) {
+        Tutor(int studentID, int staffID, std::string name, int age) {
             this->studentID = studentID;
             this->staffID = staffID;
+            this->name = name;
+            this->age = age;
             // std::cout << "Constructor of Tutor is called" << std::endl;
         }
 
@@ -65,18 +68,18 @@ class Tutor : public Student, public Staff{
 
         void showInfo() {
             std::cout << "staffID = " << staffID << std::endl
-                      << "studentID = " << studentID << std::endl;
+                      << "studentID = " << studentID << std::endl
+                      << "name = " << name << std::endl
+                      << "age = " << age << "\n\n";
         }
 };
 
 int main() {
-    Tutor t;
-
     // does not define the size
     std::vector<Tutor> tutors = {
-        Tutor(123, 99999),
-        Tutor(222, 93232),
-        Tutor(212, 23434),
+        Tutor(123, 99999, "tuan", 20),
+        Tutor(222, 93232, "khatun", 19),
+        Tutor(212, 23434, "tun", 20),
     };
 
     for (Tutor eachTutor : tutors) {
