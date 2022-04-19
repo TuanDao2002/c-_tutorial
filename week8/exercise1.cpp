@@ -73,10 +73,9 @@ class Book {
 class User{
     private:
         std::string name;
-
-    public:
         std::vector<Book*> borrowedBooks;
 
+    public:
         User();
         User(std::string name) {
             this->name = name;
