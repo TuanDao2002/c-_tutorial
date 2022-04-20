@@ -26,8 +26,8 @@ class Book {
             namesOfBorrowers.push_back(name);
         }
 
-        void removeName(std::string name) {
-            vector<std::string>::iterator it;
+        void removeName(string name) {
+            vector<string>::iterator it;
 
             // find the index of delete element
             it = std::find(namesOfBorrowers.begin(), namesOfBorrowers.end(), name);
@@ -62,12 +62,12 @@ class Book {
 
 class User{
     private:
-        std::string name;
+        string name;
         vector<Book*> borrowedBooks;
 
     public:
         User();
-        User(std::string name, vector<Book*>borrowedBooks) {
+        User(string name, vector<Book*>borrowedBooks) {
             this->name = name;
             this->borrowedBooks = borrowedBooks;
         }
@@ -127,7 +127,7 @@ class User{
 
 class SuperUser : public User {
     public:
-        SuperUser(std::string name, vector<Book*> booksBorrowed) : User(name, booksBorrowed) {}
+        SuperUser(string name, vector<Book*> booksBorrowed) : User(name, booksBorrowed) {}
 
         bool doBorrow(Book &book1, Book &book2) {
             return User::doBorrow(book1) && User::doBorrow(book2);
