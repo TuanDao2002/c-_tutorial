@@ -1,30 +1,33 @@
 #include <iostream>
 #include <algorithm> // std::find
 #include <vector>
+
+using std::vector;
+using std::string;
+
 class Book {
     private:
         std::string title;
         int availableCopies;
-        std::vector<std::string> namesOfBorrowers;
+        vector<string> namesOfBorrowers;
     
     public:
         Book();
 
-        Book(std::string title, int availableCopies) {
+        Book(string title, int availableCopies, vector<string> namesOfBorrowers) {
             this->title = title;
             this->availableCopies = availableCopies;
+            this->namesOfBorrowers = namesOfBorrowers;
         }
 
-        std::string getTitle() {
-            return title;
-        }
+        friend class User; // User can access private attributes of Book
 
         void addName(std::string name) {
             namesOfBorrowers.push_back(name);
         }
 
         void removeName(std::string name) {
-            std::vector<std::string>::iterator it;
+            vector<std::string>::iterator it;
 
             // find the index of delete element
             it = std::find(namesOfBorrowers.begin(), namesOfBorrowers.end(), name);
@@ -34,19 +37,6 @@ class Book {
             }
         
             namesOfBorrowers.erase(it);
-        }
-
-        bool minusCopy(){
-            if (availableCopies == 0) {
-                return false;
-            }
-					
-            availableCopies--;
-				return true;
-        }
-
-        void addCopy() {
-            availableCopies++;
         }
 
         void showInfo() {
@@ -73,49 +63,51 @@ class Book {
 class User{
     private:
         std::string name;
-        std::vector<Book*> borrowedBooks;
+        vector<Book*> borrowedBooks;
 
     public:
         User();
-        User(std::string name) {
+        User(std::string name, vector<Book*>borrowedBooks) {
             this->name = name;
+            this->borrowedBooks = borrowedBooks;
         }
 
-        bool doBorrow(Book &abook) {
-            if (abook.minusCopy()) {
+        virtual bool doBorrow(Book &abook) {
+            if (abook.availableCopies > 0) {
                 borrowedBooks.push_back(&abook);
                 abook.addName(this->name);
-                std::cout << name << " has borrowed " << abook.getTitle() << "\n\n";
+                abook.availableCopies--;
+                std::cout << name << " has borrowed " << abook.title << "\n\n";
                 return true;
             }
         
-            std::cerr << name << " cannot borrow " << abook.getTitle() << "\n\n";
+            std::cerr << name << " cannot borrow " << abook.title << "\n\n";
             return false;
         }
 
-				virtual bool doBorrow(Book &book1, Book &book2){
-						return false;
-				};
-
         void doReturn(Book &abook) {
-            std::vector<Book*>::iterator it;
+            vector<Book*>::iterator it;
 					
             // find the index of delete element
             it = std::find(borrowedBooks.begin(), borrowedBooks.end(), &abook);
 
             if (it == borrowedBooks.end()) {
-                std::cerr << name << " cannot return " << abook.getTitle() << std::endl;
-                std::cerr << name << " does not borrow book " << abook.getTitle() << "!!!\n\n";
+                std::cerr << name << " cannot return " << abook.title << std::endl;
+                std::cerr << name << " does not borrow book " << abook.title << "!!!\n\n";
                 return;
             }
 
             abook.removeName(this->name);
 					
             // delete element by index
-            borrowedBooks.erase(it);
+            for (int i = 0; i < borrowedBooks.size(); i++) {
+                if (borrowedBooks[i] == &abook) {
+                    borrowedBooks.erase(borrowedBooks.begin() + i);
+                }
+            }
 
-            abook.addCopy();
-            std::cerr << name << " has returned " << abook.getTitle() << "\n\n";
+            abook.availableCopies++;
+            std::cerr << name << " has returned " << abook.title << "\n\n";
         }
 
         void showInfo() {
@@ -125,24 +117,17 @@ class User{
             } else {
                 std::cout << "Books have been borrowed: \n";
                 for (auto* book : borrowedBooks) {
-                     std::cout << book->getTitle() << std::endl;
+                     std::cout << book->title << std::endl;
                 }
             }
 
             std::cout << std::endl;
         }
-
-      	~User() {
-         	// for (auto book : borrowedBooks) {
-            //     delete book;
-            // }
-            borrowedBooks.clear();
-        }
 };
 
 class SuperUser : public User {
     public:
-        SuperUser(std::string name) : User(name) {}
+        SuperUser(std::string name, vector<Book*> booksBorrowed) : User(name, booksBorrowed) {}
 
         bool doBorrow(Book &book1, Book &book2) {
             return User::doBorrow(book1) && User::doBorrow(book2);
@@ -150,46 +135,21 @@ class SuperUser : public User {
 };
 
 int main() {
-    std::vector<Book*> bookVector;
-    bookVector.push_back(new Book("Harry Potter", 100));
-    bookVector.push_back(new Book("Fantastic Beast", 1));
-    bookVector.push_back(new Book("Game of thrones", 300));
+    vector<Book> books {
+        Book("Books1", 3, vector<string>()),
+        Book("Books2", 3, vector<string>()),
+        Book("Books3", 3, vector<string>())
+    };
 
-    User user1("tuan"), user2("khatun");
+    User user1("User1", vector<Book*>()), user2("User2", vector<Book*>());
+    user1.doBorrow(books[0]);
+    user2.doBorrow(books[1]);
 
-    user1.doBorrow(*bookVector.at(1)); // vector contains pointers to Book object
-    user1.showInfo();
-    bookVector.at(1)->showBorrowers();
+    books[0].showInfo();
+    books[1].showInfo();
+    books[2].showInfo();
 
-    user2.doBorrow(*bookVector.at(1));
-    user2.showInfo();	
-    bookVector.at(1)->showBorrowers();
-
-    user2.doReturn(*bookVector.at(2));
-    user2.showInfo();
-
-    bookVector.at(2)->showInfo();
-
-    user1.doReturn(*bookVector.at(1));
-    user1.showInfo();
-    bookVector.at(1)->showInfo();
-    bookVector.at(1)->showBorrowers();
-
-    user2.doBorrow(*bookVector.at(1));
-    user2.doBorrow(*bookVector.at(2));
-    user2.showInfo();
-
-    bookVector.at(1)->showInfo();
-    bookVector.at(2)->showInfo();
-	
-    SuperUser super("super");
-    super.doBorrow(*bookVector.at(0), *bookVector.at(2));
-    super.showInfo();
-
-    for (auto pBook : bookVector) {
-        delete pBook;
-    }
-
-    bookVector.clear();
+    SuperUser super("super", vector<Book*>());
+	super.showInfo();
     return 0;
 }
