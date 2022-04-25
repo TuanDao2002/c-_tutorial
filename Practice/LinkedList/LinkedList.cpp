@@ -54,6 +54,7 @@ void LinkedList<X>::insertNodeAfter(node<X>* afterMe, X newData) {
 template <class X> 
 void LinkedList<X>::removeNode(X val) {
     node<X>* deleteNode = NULL;
+    // delete head node
 	if (head->getData() == val) {
         deleteNode = head;
         head = deleteNode->getNext();
@@ -61,6 +62,7 @@ void LinkedList<X>::removeNode(X val) {
 		return;
     }
 
+    // delete middle node
     node<X>* current = head;
     while (current->getNext() != NULL) {
         if (current->getNext()->getData() == val) {
