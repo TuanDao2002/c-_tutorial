@@ -105,6 +105,59 @@ void deleteNode(Node* &head, Node* delNode) {
     // delete delNode;
 }
 
+void swap(Node* &originNode, Node* first, Node* second) {
+    if (first == originNode) {
+        originNode = second;
+    } else if (second == originNode) {
+        originNode = first;
+    }
+	
+    Node* temp = first->next;
+    first->next = second->next;
+	first->next->prev = first;
+    second->next = temp;
+	second->next->prev = second;
+
+    temp = first->prev;
+    first->prev = second->prev;
+	first->prev->next = first;
+    second->prev = temp;
+	second->prev->next = second;
+}
+
+void sort(Node* &originNode) {
+    Node* current = originNode;
+    Node* nextNode = NULL;
+    while (current != NULL) {
+        if (current->next == originNode) {
+            break;
+        }
+    
+        nextNode = current->next;
+        while (nextNode != NULL) {
+            if (current->value > nextNode->value) {
+                swap(originNode, current, nextNode);
+
+                // swap again so current index will not be moved to the swapped node
+                Node* temp = current;
+                current = nextNode;
+                nextNode = temp;
+
+                // printForward(originNode);
+                // std::cout << "\n";
+            }
+
+            if (nextNode->next == originNode) {
+                break;
+            }
+
+            nextNode = nextNode->next;
+        }
+
+        current = current->next;
+    }
+}
+
 int main(){
     Node n1 = Node(8), n2 = Node(5), n3 = Node(3), n4 = Node(6);
 
@@ -134,7 +187,7 @@ int main(){
     // insert new node with value 100 at the head of the list
     insertNode(originNode, NULL, &newNode);
     std::cout << "\n\nAfter insert a new node with value 100 at the head of the list" << std::endl;
-    std::cout << "The head node now is: " << originNode->value << std::endl;
+    // std::cout << "The head node now is: " << originNode->value << std::endl;
     printForward(originNode);
     std::cout << std::endl;
     printBackward(lastNode);
@@ -143,17 +196,26 @@ int main(){
     // insert new node after 3 and 6
     insertNode(originNode, &n3, &newNode1);
     std::cout << "\n\nAfter insert new node with value 200 after node with value 3" << std::endl;
-    std::cout << "The head node now is: " << originNode->value << std::endl;
+    // std::cout << "The head node now is: " << originNode->value << std::endl;
     printForward(originNode);
     std::cout << std::endl;
     printBackward(lastNode);
 
     Node* delNode = &n2;
-    deleteNode(originNode, originNode);
+    deleteNode(originNode, delNode);
     std::cout << "\n\nAfter delete node with value 5" << std::endl;
-    std::cout << "The head node now is: " << originNode->value << std::endl;
+    // std::cout << "The head node now is: " << originNode->value << std::endl;
     printForward(originNode);
     std::cout << std::endl;
     printBackward(lastNode);
+
+    swap(originNode, &n1, &n4);
+    std::cout << "\n\nAfter swap 8 and 6:" << std::endl;
+    printForward(originNode);
+
+    sort(originNode);
+    std::cout << "\n\nAfter sorting:" << std::endl;
+    printForward(originNode);
+	
     return 0;
 }
