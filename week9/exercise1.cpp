@@ -1,14 +1,25 @@
 #include <iostream>
 
+#if 1
 class Node{
     public:
         int value;
         Node* next = NULL;
         Node* prev = NULL;
 
+        // constructors
+        Node(){}
         Node(int value) {
             this->value = value;
         }
+
+        // method to set connections to node
+        void connectNode(Node* next, Node* prev) {
+            this->next = next;
+            this->prev = prev;
+        }
+
+
 };
 
 void printForward(Node* originNode) {
@@ -158,10 +169,10 @@ void sort(Node* &originNode) {
     }
 }
 
-int main(){
-    Node n1 = Node(8), n2 = Node(5), n3 = Node(3), n4 = Node(6);
 
-    // doubly linkedlist
+int main(){
+    Node n1(8), n2(5), n3(3), n4(6);
+
     Node* originNode = &n1;
 
     n1.next = &n2;
@@ -219,3 +230,104 @@ int main(){
 	
     return 0;
 }
+#endif
+
+#if 0
+
+class Node{
+    private:
+        int value;
+        Node* next = NULL;
+        Node* prev = NULL;
+
+    public:
+        // constructors
+        Node(){}
+        Node(int value) {
+            this->value = value;
+        }
+
+        // method to set connections to node
+        void connectNode(Node* prev, Node* next) {
+            this->prev = prev;
+            this->next = next;
+        }
+
+        friend void showForwdLink(Node* head);
+        friend void insertNode(Node*& head, Node* priorNode, Node* newNode);
+        friend void swap(Node &node1, Node &node2);
+};
+
+void showForwdLink(Node* head) {
+    Node* temp = head;
+
+    while (temp != NULL) {
+        std::cout << temp->value << " --> ";
+        temp = temp->next;
+    }
+
+    std::cout << std::endl;
+}
+
+void insertNode(Node*& head, Node* priorNode, Node* newNode) {
+    if (priorNode != NULL) {
+        // connect newNode to the node after priorNode
+        newNode->next = priorNode->next;
+        (priorNode->next)->prev = newNode;
+        
+        // connect priorNode to newNode
+        priorNode->next = newNode;
+        newNode->prev = priorNode;
+    } else {
+        //connect newNode to current head
+        newNode->next = head;
+        head->prev = newNode;
+
+        // connect head to newNode
+        head = newNode;
+        newNode->prev = NULL;   
+    }
+}
+
+void swap(Node &node1, Node &node2) {
+    Node temp = node2; // use temp to COPY node2
+
+    // connect node2 to next node of node1
+    node2.next = node1.next;
+    (node1.next)->prev = &node2;
+
+    // connect node2 to previous node of node1
+    node2.prev = node1.prev;
+    (node1.prev)->next = &node2;
+
+    // connect node1 to next node of node2
+    node1.next = temp.next;
+    (temp.next)->prev = &node1;
+
+    // connect node1 to previous node of node2
+    node1.prev = temp.prev;
+    (temp.prev)->next = &node1;
+}
+
+int main() {
+    // create 4 nodes with values 8,5,3,6
+    Node node1(8), node2(5), node3(3), node4(6);
+
+    Node* head = &node1; // head = 
+    node1.connectNode(NULL, &node2);
+    node2.connectNode(&node1, &node3);
+    node3.connectNode(&node2, &node4);
+    node4.connectNode(&node3, NULL);
+    Node* tail = &node4;
+    showForwdLink(head);
+
+    // Node newNode(100);
+    // insertNode(head, NULL, &newNode);
+    // showForwdLink(head);
+
+    swap(node2, node4);
+    showForwdLink(head);
+    return 0;
+}
+
+#endif
