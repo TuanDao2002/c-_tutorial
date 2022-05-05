@@ -1,6 +1,6 @@
 #include <iostream>
 
-#if 1
+#if 0
 class Node{
     public:
         int value;
@@ -116,11 +116,17 @@ void deleteNode(Node* &head, Node* delNode) {
     // delete delNode;
 }
 
-void swap(Node* &originNode, Node* first, Node* second) {
+void swap(Node* &originNode, Node* &lastNode, Node* first, Node* second) {
     if (first == originNode) {
         originNode = second;
     } else if (second == originNode) {
         originNode = first;
+    }
+
+    if (first == lastNode) {
+        lastNode = second;
+    } else if (second == lastNode) {
+        lastNode = first;
     }
 	
     Node* temp = first->next;
@@ -136,7 +142,7 @@ void swap(Node* &originNode, Node* first, Node* second) {
 	second->prev->next = second;
 }
 
-void sort(Node* &originNode) {
+void sort(Node* &originNode, Node* &lastNode) {
     Node* current = originNode;
     Node* nextNode = NULL;
     while (current != NULL) {
@@ -147,15 +153,12 @@ void sort(Node* &originNode) {
         nextNode = current->next;
         while (nextNode != NULL) {
             if (current->value > nextNode->value) {
-                swap(originNode, current, nextNode);
+                swap(originNode, lastNode, current, nextNode);
 
-                // swap again so current index will not be moved to the swapped node
+                // swap again so pointer to current node will not be moved to the swapped node
                 Node* temp = current;
                 current = nextNode;
                 nextNode = temp;
-
-                // printForward(originNode);
-                // std::cout << "\n";
             }
 
             if (nextNode->next == originNode) {
@@ -220,11 +223,13 @@ int main(){
     std::cout << std::endl;
     printBackward(lastNode);
 
-    swap(originNode, &n1, &n4);
-    std::cout << "\n\nAfter swap 8 and 6:" << std::endl;
+    swap(originNode, lastNode, &newNode1, &n4);
+    std::cout << "\n\nAfter swap 200 and 6:" << std::endl;
     printForward(originNode);
+    std::cout << std::endl;
+    printBackward(lastNode);
 
-    sort(originNode);
+    sort(originNode, lastNode);
     std::cout << "\n\nAfter sorting:" << std::endl;
     printForward(originNode);
 	
@@ -232,7 +237,7 @@ int main(){
 }
 #endif
 
-#if 0
+#if 1
 
 class Node{
     private:
@@ -253,9 +258,27 @@ class Node{
             this->next = next;
         }
 
+        void linkNextNode(Node* nextNode) {
+            this->next = nextNode;
+
+            if (nextNode != NULL) {
+                nextNode->prev = this;
+            }
+        }
+
+        void linkPrevNode(Node* prevNode) {
+            this->prev = prevNode;
+
+            if (prevNode != NULL) {
+                prevNode->next = this;
+            }
+        }
+
         friend void showForwdLink(Node* head);
-        friend void insertNode(Node*& head, Node* priorNode, Node* newNode);
-        friend void swap(Node &node1, Node &node2);
+        friend void showBackwdLink(Node* tail);
+        friend void insertNode(Node*& head, Node*& tail, Node* priorNode, Node* newNode);
+        friend void deleteNode(Node*& head, Node*& tail, Node* delNode);
+        friend void swap(Node*& head, Node*& tail, Node* node1, Node* node2);
 };
 
 void showForwdLink(Node* head) {
@@ -269,44 +292,85 @@ void showForwdLink(Node* head) {
     std::cout << std::endl;
 }
 
-void insertNode(Node*& head, Node* priorNode, Node* newNode) {
-    if (priorNode != NULL) {
-        // connect newNode to the node after priorNode
-        newNode->next = priorNode->next;
-        (priorNode->next)->prev = newNode;
-        
-        // connect priorNode to newNode
-        priorNode->next = newNode;
-        newNode->prev = priorNode;
-    } else {
-        //connect newNode to current head
-        newNode->next = head;
-        head->prev = newNode;
+void showBackwdLink(Node* tail) {
+    Node* temp = tail;
 
-        // connect head to newNode
+    while (temp != NULL) {
+        std::cout << temp->value << " --> ";
+        temp = temp->prev;
+    }
+
+    std::cout << std::endl;
+}
+
+void insertNode(Node*& head, Node*& tail, Node* priorNode, Node* newNode) {
+    if (priorNode != NULL) {
+        newNode->linkNextNode(priorNode->next);
+        priorNode->linkNextNode(newNode);
+
+        if (priorNode == tail) {
+            tail = newNode;
+        }
+    } else {
+        newNode->linkNextNode(head);
         head = newNode;
-        newNode->prev = NULL;   
     }
 }
 
-void swap(Node &node1, Node &node2) {
-    Node temp = node2; // use temp to COPY node2
+void deleteNode(Node*& head, Node*& tail, Node* delNode) {
 
-    // connect node2 to next node of node1
-    node2.next = node1.next;
-    (node1.next)->prev = &node2;
+    if (head == delNode) {
+        head = delNode->next;
+        head->linkPrevNode(NULL); // set prev for new head node to null to go backward
+        return;
+    }
 
-    // connect node2 to previous node of node1
-    node2.prev = node1.prev;
-    (node1.prev)->next = &node2;
+    Node* priorNode = head;
 
-    // connect node1 to next node of node2
-    node1.next = temp.next;
-    (temp.next)->prev = &node1;
+    while (priorNode != NULL) {
+        if (priorNode->next == delNode) {
+            priorNode->linkNextNode(delNode->next);
 
-    // connect node1 to previous node of node2
-    node1.prev = temp.prev;
-    (temp.prev)->next = &node1;
+            if (tail == delNode) {
+                tail = priorNode;
+            }
+
+            break;
+        }
+
+        priorNode = priorNode->next;
+    }
+}
+
+void swap(Node*& head, Node*& tail, Node* node1, Node* node2) {
+    Node temp = *node1;
+
+    if (node1->next == node2) { // node1 before node2
+        node1->linkNextNode(node2->next);
+        node1->linkPrevNode(node2);
+        node2->linkPrevNode(temp.prev);
+    } else if (node1->prev == node2) { // node1 after node2
+        node1->linkPrevNode(node2->prev);
+        node1->linkNextNode(node2);
+        node2->linkNextNode(temp.next);
+    } else {
+        node1->linkNextNode(node2->next);
+        node1->linkPrevNode(node2->prev);
+        node2->linkNextNode(temp.next);
+        node2->linkPrevNode(temp.prev);
+    }
+
+    if (node1 == head) {
+        head = node2;
+    } else if (node2 == head) {
+        head = node1;
+    }
+
+    if (node1 == tail) {
+        tail = node2;
+    } else if (node2 == tail) {
+        tail = node1;
+    }
 }
 
 int main() {
@@ -321,12 +385,33 @@ int main() {
     Node* tail = &node4;
     showForwdLink(head);
 
-    // Node newNode(100);
-    // insertNode(head, NULL, &newNode);
-    // showForwdLink(head);
+    Node newNode(100);
+    insertNode(head, tail, NULL, &newNode);
 
-    swap(node2, node4);
+    std::cout << "After insert 100 at head:" << std::endl;
     showForwdLink(head);
+
+    Node newNode2(200);
+    insertNode(head, tail, &node2, &newNode2);
+
+    std::cout << "After insert 200 after 5" << std::endl;
+    showForwdLink(head);
+    showBackwdLink(tail);
+
+    deleteNode(head, tail, head);
+    std::cout << "After deleting head: " << std::endl;
+    showForwdLink(head);
+    showBackwdLink(tail);
+
+    deleteNode(head, tail, &newNode2);
+    std::cout << "After deleting node 200:" << std::endl;
+    showForwdLink(head);
+    showBackwdLink(tail);
+
+    swap(head, tail, &node1, &node4);
+    std::cout << "After swapping head and tail:" << std::endl;
+    showForwdLink(head);
+    showBackwdLink(tail);
     return 0;
 }
 
