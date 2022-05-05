@@ -7,14 +7,14 @@ using std::vector;
 class Facebooker{
     public:
         string name;
-        vector<Facebooker*> friends;
+        vector<Facebooker*> friends = {};
 
-        Facebooker(string name, vector<Facebooker*> friends) {
+        Facebooker(string name) {
             this->name = name;
-            this->friends = friends;
         }
 
         void printFriendName() {
+            std::cout << "All friends of " << this->name << ":" << std::endl;
             for (Facebooker* f : friends) {
                 std::cout << f->name << std::endl;
             }
@@ -26,7 +26,7 @@ class Facebooker{
             // do not add itself
             if (this == &f) return;
 
-            // if f is already a friend, do not need to ask
+            // if f is already a friend, do not need to add
             if (std::find(friends.begin(), friends.end(), &f) != friends.end()) return;
 
             // add friend at both side
@@ -35,6 +35,7 @@ class Facebooker{
         }
         
         void findMutual(Facebooker &f) {
+            std::cout << "Mutual friends between " << this->name << " and " << f.name << ":" << std::endl;
             for (Facebooker* fr : f.friends) {
                 if (std::find(friends.begin(), friends.end(), fr) != friends.end()) {
                     std::cout << fr->name << std::endl;
@@ -43,29 +44,34 @@ class Facebooker{
 
             std::cout << std::endl;
         }
+
+        void findFriendsOfFriend() {
+            std::cout << "Friends of friends of: " << this->name << std::endl;
+            for (Facebooker* eachFriend : friends) {
+                for (Facebooker* fof : eachFriend->friends) {
+                    if (fof != this) {
+                        std::cout << fof->name << std::endl;
+                    }
+                }
+            }
+
+            std::cout << std::endl;
+        }
 };
 
 int main(){
-    Facebooker f1("tuan1", vector<Facebooker*>());
-    Facebooker f2("tuan2", vector<Facebooker*>());
-    Facebooker f3("tuan3", vector<Facebooker*>());
-    Facebooker f4("tuan4", vector<Facebooker*>());
+    Facebooker harry("Harry"), peter("Peter"), john("John"), luna("Luna");
+    harry.addFriend(peter);
+    harry.addFriend(john);
+    peter.addFriend(luna);
+    peter.addFriend(john);
 
-    f1.addFriend(f2);
-    f1.addFriend(f3);
-    f1.addFriend(f4);
-    std::cout << "Friends of f1:" << std::endl;
-    f1.printFriendName();
+    harry.printFriendName();
+    luna.printFriendName();
 
-    f2.addFriend(f3);
-    f2.addFriend(f4);
-    std::cout << "Friends of friends of f1:" << std::endl;
-    for (Facebooker* f : f1.friends) {
-        std::cout << "Friends of " << f->name << std::endl;
-        f->printFriendName();
-    }
+    harry.findFriendsOfFriend();
 
-    std::cout << "Mutual friends between f1 and f4:" << std::endl;
-    f2.findMutual(f4);
+    harry.findMutual(peter);
+    
     return 0;
 }
