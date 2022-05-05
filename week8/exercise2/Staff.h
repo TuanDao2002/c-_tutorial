@@ -1,21 +1,28 @@
 #pragma once
-#include<iostream>
-#include<vector>
-#include "Department.h"
 
+#include <iostream>
+using std::string;
+//Class Prototype 
+//(declare Department class to use this data type in Staff class)
 class Department;
-class Staff{
-    private:
-        std::string name;
-        Department department;
 
-    public:
-        Staff();
+class Staff {
+private:
+    string name;
+    string deptName;
 
-        Staff(std::string name);
+public:
+    //Constructors
+    Staff(){}
+    Staff(string name, string deptName){
+        this->name = name;
+        this->deptName = deptName;
+    }
 
-        void join(Department department);
-        void leave();
+    //Methods: declare first, define later
+    //(since the class Deparment is not fully defined above)
+    void joinDept(Department &dept);    
+    void leaveDept(Department &dept);
 
-        void showInfo();
+    friend class Department; //grant access
 };
