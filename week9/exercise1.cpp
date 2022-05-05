@@ -279,6 +279,7 @@ class Node{
         friend void insertNode(Node*& head, Node*& tail, Node* priorNode, Node* newNode);
         friend void deleteNode(Node*& head, Node*& tail, Node* delNode);
         friend void swap(Node*& head, Node*& tail, Node* node1, Node* node2);
+        friend void sortAscend(Node*& head, Node*& tail);
 };
 
 void showForwdLink(Node* head) {
@@ -287,6 +288,11 @@ void showForwdLink(Node* head) {
     while (temp != NULL) {
         std::cout << temp->value << " --> ";
         temp = temp->next;
+
+        // for circular linkedlist
+        // if (temp == head) {
+        //     break;
+        // }
     }
 
     std::cout << std::endl;
@@ -298,6 +304,11 @@ void showBackwdLink(Node* tail) {
     while (temp != NULL) {
         std::cout << temp->value << " --> ";
         temp = temp->prev;
+
+        // for circular linkedlist
+        // if (temp == tail) {
+        //     break;
+        // }
     }
 
     std::cout << std::endl;
@@ -314,6 +325,9 @@ void insertNode(Node*& head, Node*& tail, Node* priorNode, Node* newNode) {
     } else {
         newNode->linkNextNode(head);
         head = newNode;
+
+        // for circular linkedlist
+        // tail->linkNextNode(head);
     }
 }
 
@@ -321,7 +335,7 @@ void deleteNode(Node*& head, Node*& tail, Node* delNode) {
 
     if (head == delNode) {
         head = delNode->next;
-        head->linkPrevNode(NULL); // set prev for new head node to null to go backward
+        head->linkPrevNode(delNode->prev);
         return;
     }
 
@@ -373,15 +387,46 @@ void swap(Node*& head, Node*& tail, Node* node1, Node* node2) {
     }
 }
 
+void sortAscend(Node*& head, Node*& tail) {
+    while (true) {
+        bool hasSwap = false;
+
+        for (Node* left = head; left != NULL && left != tail;) {
+            if (left->value > left->next->value) {
+                swap(head, tail, left, left->next);
+                hasSwap = true;
+            } else {
+                left = left->next;
+            }
+        }
+
+        if (!hasSwap) {
+            break;
+        }
+    }
+}
+
+
 int main() {
     // create 4 nodes with values 8,5,3,6
     Node node1(8), node2(5), node3(3), node4(6);
 
-    Node* head = &node1; // head = 
+    Node* head = &node1; 
+
+    // non circular
     node1.connectNode(NULL, &node2);
     node2.connectNode(&node1, &node3);
     node3.connectNode(&node2, &node4);
     node4.connectNode(&node3, NULL);
+
+    // circular
+    /*
+    node1.connectNode(&node4, &node2);
+    node2.connectNode(&node1, &node3);
+    node3.connectNode(&node2, &node4);
+    node4.connectNode(&node3, &node1);
+    */
+
     Node* tail = &node4;
     showForwdLink(head);
 
@@ -392,9 +437,9 @@ int main() {
     showForwdLink(head);
 
     Node newNode2(200);
-    insertNode(head, tail, &node2, &newNode2);
+    insertNode(head, tail, tail, &newNode2);
 
-    std::cout << "After insert 200 after 5" << std::endl;
+    std::cout << "After insert 200 after tail" << std::endl;
     showForwdLink(head);
     showBackwdLink(tail);
 
@@ -410,6 +455,11 @@ int main() {
 
     swap(head, tail, &node1, &node4);
     std::cout << "After swapping head and tail:" << std::endl;
+    showForwdLink(head);
+    showBackwdLink(tail);
+
+    sortAscend(head, tail);
+    std::cout << "After sorting in ascending order:" << std::endl;
     showForwdLink(head);
     showBackwdLink(tail);
     return 0;
