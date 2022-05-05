@@ -85,5 +85,12 @@ int main() {
     for (Tutor eachTutor : tutors) {
         eachTutor.showInfo();
     }
+
+    tutors.erase(tutors.begin() + DELETE_INDEX);
+
+    std::cout << "Vector after deleting at index: " << DELETE_INDEX << std::endl;
+    for (Tutor eachTutor : tutors) {
+        eachTutor.showInfo();
+    }
     return 0;
 }

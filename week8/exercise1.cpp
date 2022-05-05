@@ -135,21 +135,31 @@ class SuperUser : public User {
 };
 
 int main() {
-    vector<Book> books {
-        Book("Books1", 3, vector<string>()),
-        Book("Books2", 3, vector<string>()),
-        Book("Books3", 3, vector<string>())
+    vector<Book*> books {
+        new Book("Books1", 3, vector<string>()),
+        new Book("Books2", 3, vector<string>()),
+        new Book("Books3", 3, vector<string>())
     };
 
     User user1("User1", vector<Book*>()), user2("User2", vector<Book*>());
-    user1.doBorrow(books[0]);
-    user2.doBorrow(books[1]);
+    user1.doBorrow(*books[0]);
+    user2.doBorrow(*books[1]);
 
-    books[0].showInfo();
-    books[1].showInfo();
-    books[2].showInfo();
+    books[0]->showInfo();
+    books[1]->showInfo();
+    books[2]->showInfo();
 
     SuperUser super("super", vector<Book*>());
+    super.doBorrow(*books[0], *books[1]);
 	super.showInfo();
+
+    books[0]->showInfo();
+    books[1]->showInfo();
+    books[2]->showInfo();
+
+    // free up memory at the end
+    for (Book* abook : books) {
+        delete abook;
+    }
     return 0;
 }
