@@ -15,23 +15,22 @@ class Shop {
         vector<Product*> productList = {};
     public:
         Shop(){};
-        Shop(string name, vector<Product*> productList) {
+        Shop(string name) {
             this->name = name;
-            this->productList = productList;
         }
 
-        void addProduct(Product* product) {
-            this->productList.push_back(product);
-        }
+        void addProduct(Product* product);
 
         friend class Acc;
         friend class GoldAcc;
+        friend class Product;
 };
 
 class Product {
     private:
         string name;
         double price;
+        Shop *shop;
     public:
         Product(){};
         Product(string name, double price) {
@@ -41,12 +40,27 @@ class Product {
 
         void displayInfo() {
             std::cout << "Name: " << name
-                      << ", Price: " << price << std::endl;  
+                      << ", Price: " << price 
+                      << ", Shop: " << shop->name << std::endl;  
         }
 
         friend class Acc;
         friend class GoldAcc;
+        friend class Shop;
 };
+
+void Shop::addProduct(Product* product) {
+    this->productList.push_back(product);
+    product->shop = this;
+}
+
+void removeProduct(vector<Product*> &products, Product* removeProduct) {
+    for (int i = 0; i < products.size(); i++) {
+        if (products[i] == removeProduct) {
+            products.erase(products.begin() + i);
+        }
+    }
+}
 
 class Acc {
     protected:
@@ -61,47 +75,18 @@ class Acc {
             this->bill = bill;
         }
 
-        virtual void buyProduct(Product* buyProduct, Shop* shop) {
-            for (int j = 0; j < this->boughtProducts.size(); j++) {
-                if (this->boughtProducts[j] == buyProduct) {
-                    std::cout << name << " bought product: " << buyProduct->name << " already!!!"<< std::endl;
-                    return;
-                }
-            }
-
-            for (int i = 0; i < shop->productList.size(); i++) {
-                if (shop->productList[i] == buyProduct) {
-                    this->boughtProducts.push_back(buyProduct);
-                    bill += buyProduct->price;
-
-                    std::cout << name << " has bought product: " << buyProduct->name << " from shop: " << shop->name << std::endl;
-                    return;
-                }
-            }
-
-            std::cout << "Product: " << buyProduct->name << " is not in shop: " << shop->name << std::endl;
+        virtual void buyProduct(Product* buyProduct) {
+            this->boughtProducts.push_back(buyProduct);
+            removeProduct(buyProduct->shop->productList, buyProduct);
+            bill += buyProduct->price;
+            std::cout << name << " has bought product: " << buyProduct->name << " from shop: " << buyProduct->shop->name << std::endl;
         }
 
-        virtual void returnProduct(Product* returnedProduct, Shop* shop) {
-            bool containsProduct = false;
-            for (int i = 0; i < shop->productList.size(); i++) {
-                if (shop->productList[i] == returnedProduct) {
-                    containsProduct = true;
-                    break;
-                }
-            }
-
-            if (!containsProduct) {
-                std::cout << "Shop: " << shop->name << " does not have product: " << returnedProduct->name << std::endl;
-            }
-
-            for (int j = 0; j < this->boughtProducts.size(); j++) {
-                if (this->boughtProducts[j] == returnedProduct) {
-                    this->boughtProducts.erase(this->boughtProducts.begin() + j);
-                    bill -= returnedProduct->price * (1 - ACC_CHARGE);
-                    std::cout << name << " has returned product: " << returnedProduct->name << " to shop: " << shop->name << std::endl;
-                }
-            }
+        virtual void returnProduct(Product* returnedProduct) {
+            removeProduct(this->boughtProducts, returnedProduct);
+            returnedProduct->shop->productList.push_back(returnedProduct);
+            bill -= returnedProduct->price * (1 - ACC_CHARGE);
+            std::cout << name << " has returned product: " << returnedProduct->name << " to shop: " << returnedProduct->shop->name << std::endl;
         }
 
 
@@ -125,51 +110,18 @@ class GoldAcc : public Acc {
             this->discRate = discRate;
         }
 
-        void buyProduct(Product* buyProduct, Shop* shop) {
-            for (int j = 0; j < this->boughtProducts.size(); j++) {
-                if (this->boughtProducts[j] == buyProduct) {
-                    std::cout << name << " bought product: " << buyProduct->name << " already!!!"<< std::endl;
-                    return;
-                }
-            }
-
-            for (int i = 0; i < shop->productList.size(); i++) {
-                if (shop->productList[i] == buyProduct) {
-                    this->boughtProducts.push_back(buyProduct);
-                    bill += buyProduct->price * (1 - discRate);
-
-                    std::cout << name << " has bought product: " << buyProduct->name << " from shop: " << shop->name << std::endl;
-                    return;
-                }
-            }
-
-            std::cout << "Product: " << buyProduct->name << " is not in shop: " << shop->name << std::endl;
+        virtual void buyProduct(Product* buyProduct) {
+            this->boughtProducts.push_back(buyProduct);
+            removeProduct(buyProduct->shop->productList, buyProduct);
+            bill += buyProduct->price * (1 - discRate);
+            std::cout << name << " has bought product: " << buyProduct->name << " from shop: " << buyProduct->shop->name << std::endl;
         }
 
-        void returnProduct(Product* returnedProduct, Shop* shop) {
-            bool containsProduct = false;
-            for (int i = 0; i < shop->productList.size(); i++) {
-                if (shop->productList[i] == returnedProduct) {
-                    containsProduct = true;
-                    break;
-                }
-            }
-
-            if (!containsProduct) {
-                std::cout << "Shop: " << shop->name << " does not have product: " << returnedProduct->name << std::endl;
-                return;
-            }
-
-            for (int j = 0; j < this->boughtProducts.size(); j++) {
-                if (this->boughtProducts[j] == returnedProduct) {
-                    this->boughtProducts.erase(this->boughtProducts.begin() + j);
-                    bill -= returnedProduct->price * (1 - discRate) * (1 - GOLD_CHARGE);
-                    std::cout << name << " has returned product: " << returnedProduct->name << " to shop: " << shop->name << std::endl;
-                    return;
-                }
-            }
-
-            std::cout << name << " did not buy product: " << returnedProduct->name << std::endl;
+        virtual void returnProduct(Product* returnedProduct) {
+            removeProduct(this->boughtProducts, returnedProduct);
+            returnedProduct->shop->productList.push_back(returnedProduct);
+            bill -= returnedProduct->price * (1 - discRate) * (1 - GOLD_CHARGE);
+            std::cout << name << " has returned product: " << returnedProduct->name << " to shop: " << returnedProduct->shop->name << std::endl;
         }
 
         void displayInfo() {
@@ -179,37 +131,27 @@ class GoldAcc : public Acc {
 };
 
 int main(){
-    Product apple("apple", 100);
-    Product orange("orange", 200);
-    Product grape("grape", 300);
+    //Create some shops and add products
+    Shop shop1("Shop1");
+    Product pd1("Shoe", 1000);
+    shop1.addProduct(&pd1); 
 
-    Shop shop1("shop 1", vector<Product*>());
-    shop1.addProduct(&apple);
-    shop1.addProduct(&orange);
+    Shop shop2("Shop2");
+    Product pd2("Car", 20000);
+    shop2.addProduct(&pd2); 
 
-    Shop shop2("shop 2", vector<Product*>());
-    shop2.addProduct(&grape);
+    //Create two customers
+    Acc acc1("Peter", 0);
+    GoldAcc goldAcc1("John", 0, 0.2);
 
-    Acc acc("tuan", 0);
-    GoldAcc goldAcc("khatun", 0, 0.15);
+    //Test buying/ returning
+    acc1.buyProduct(&pd1);
+    acc1.buyProduct(&pd2);
+    acc1.returnProduct(&pd1);
+    acc1.displayInfo();
 
-    acc.buyProduct(&apple, &shop1);
-    acc.buyProduct(&orange, &shop1);
-    acc.displayInfo();
-
-    std::cout << std::endl;
-    acc.returnProduct(&apple, &shop1);
-    acc.displayInfo();
-
-    std::cout << std::endl;
-    goldAcc.buyProduct(&grape, &shop2);
-    goldAcc.displayInfo();
-
-    std::cout << std::endl;
-    goldAcc.returnProduct(&grape, &shop1);
-    goldAcc.buyProduct(&orange, &shop2);
-    goldAcc.returnProduct(&grape, &shop2);
-    goldAcc.returnProduct(&grape, &shop2);
-    goldAcc.displayInfo();
+    goldAcc1.buyProduct(&pd1);
+    goldAcc1.returnProduct(&pd1);
+    goldAcc1.displayInfo();
     return 0;
 }
