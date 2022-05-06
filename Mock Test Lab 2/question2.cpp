@@ -64,11 +64,13 @@ void printLowestAndHighestProfitBroker(Broker* firstBroker) {
     }
 
     std::cout << "\nBroker with highest profit: " << std::endl;
-    highestProfitBroker->showInfo();
+    std::cout << "Name: " << highestProfitBroker->name 
+                          << ", Profit: " << highestProfitBroker->sellPrice - highestProfitBroker->buyPrice << std::endl;
 
     std::cout << "\nBroker with lowest profit:" << std::endl;
-    lowestProfitBroker->showInfo();
-}
+    std::cout << "Name: " << lowestProfitBroker->name 
+                          << ", Profit: " << lowestProfitBroker->sellPrice - lowestProfitBroker->buyPrice << std::endl;
+    }
 
 void deleteTransacation(Broker*& firstBroker, Broker*& lastBroker, Broker* deleteBroker) {
     if (firstBroker == deleteBroker) {
