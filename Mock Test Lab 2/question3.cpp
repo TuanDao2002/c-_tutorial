@@ -165,8 +165,11 @@ class GoldAcc : public Acc {
                     this->boughtProducts.erase(this->boughtProducts.begin() + j);
                     bill -= returnedProduct->price * (1 - discRate) * (1 - GOLD_CHARGE);
                     std::cout << name << " has returned product: " << returnedProduct->name << " to shop: " << shop->name << std::endl;
+                    return;
                 }
             }
+
+            std::cout << name << " did not buy product: " << returnedProduct->name << std::endl;
         }
 
         void displayInfo() {
@@ -205,6 +208,7 @@ int main(){
     std::cout << std::endl;
     goldAcc.returnProduct(&grape, &shop1);
     goldAcc.buyProduct(&orange, &shop2);
+    goldAcc.returnProduct(&grape, &shop2);
     goldAcc.returnProduct(&grape, &shop2);
     goldAcc.displayInfo();
     return 0;
